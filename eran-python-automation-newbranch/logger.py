@@ -1,28 +1,23 @@
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
-import os
 from typing import Set, List, Dict, Any
 import time
-
-import gspread
-from google.oauth2.service_account import Credentials  
-import os
-from typing import Set, List, Dict, Any
-import time
-
 import os
 from google.oauth2.service_account import Credentials
-import gspread
 
 class GoogleSheetManager:
     def __init__(self, sheet_id: str):
         try:
-            # Load credentials from ENV variables (not file)
+            # Updated scopes (modern OAuth2)
+            scope = [
+                "https://www.googleapis.com/auth/spreadsheets",
+                "https://www.googleapis.com/auth/drive"
+            ]
+            
             creds_dict = {
                 "type": os.getenv("GOOGLE_TYPE"),
                 "project_id": os.getenv("GOOGLE_PROJECT_ID"),
                 "private_key_id": os.getenv("GOOGLE_PRIVATE_KEY_ID"),
-                "private_key": os.getenv("GOOGLE_PRIVATE_KEY").replace('\\n', '\n'),  # Fix newlines
+                "private_key": os.getenv("GOOGLE_PRIVATE_KEY").replace('\\n', '\n'),
                 "client_email": os.getenv("GOOGLE_CLIENT_EMAIL"),
                 "client_id": os.getenv("GOOGLE_CLIENT_ID"),
                 "auth_uri": os.getenv("GOOGLE_AUTH_URI"),
@@ -31,13 +26,15 @@ class GoogleSheetManager:
                 "client_x509_cert_url": os.getenv("GOOGLE_CLIENT_X509_CERT_URL")
             }
             
-            creds = Credentials.from_service_account_info(creds_dict)  # Use dict, not file
+            creds = Credentials.from_service_account_info(creds_dict, scopes=scope)
             client = gspread.authorize(creds)
             
             spreadsheet = client.open_by_key(sheet_id)
             self.log_sheet = spreadsheet.worksheet("Log")
-            # ... rest of your code ...
+            self.processed_sheet = spreadsheet.worksheet("Processed Leads")
+            self.invalid_sheet = spreadsheet.worksheet("Invalid Leads")
             
+            print("✅ Successfully connected to Google Sheets.")
         except Exception as e:
             raise Exception(f"❌ Failed to initialize GoogleSheetManager: {e}")
 
