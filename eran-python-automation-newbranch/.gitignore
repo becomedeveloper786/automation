@@ -1,0 +1,51 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment files
+venv/
+env/
+.venv/
+ENV/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Credentials (never commit secrets!)
+credentials.json
+*.key
+*.pem
+*.crt
+*.cer
+
+# IDE-specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build / distribution files
+build/
+dist/
+*.egg-info/
+*.egg
+*.whl
+
+# Log files
+*.log
+logs/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Unit test / coverage reports
+htmlcov/
+.coverage
+.pytest_cache/
